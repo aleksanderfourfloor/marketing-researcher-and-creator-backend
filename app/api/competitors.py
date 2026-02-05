@@ -127,7 +127,7 @@ async def bulk_upload_csv(
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
 ):
-    """Bulk create competitors from CSV. Expected columns: name, website_url, industry, description, logo_url, status."""
+    """Bulk create from CSV. Columns: name, website_url (or website), industry, description, logo_url, status, twitter_url, instagram_url, facebook_url, reddit_url, discord_url."""
     if not file.filename or not file.filename.lower().endswith(".csv"):
         raise HTTPException(status_code=400, detail="Upload a CSV file")
     content = await file.read()
@@ -141,9 +141,15 @@ async def bulk_upload_csv(
         name = (row.get("name") or "").strip()
         if not name:
             continue
+        website = (row.get("website_url") or row.get("website") or "").strip() or None
         comp = Competitor(
             name=name,
-            website_url=(row.get("website_url") or "").strip() or None,
+            website_url=website,
+            twitter_url=(row.get("twitter_url") or row.get("twitter") or "").strip() or None,
+            instagram_url=(row.get("instagram_url") or row.get("instagram") or "").strip() or None,
+            facebook_url=(row.get("facebook_url") or row.get("facebook") or "").strip() or None,
+            reddit_url=(row.get("reddit_url") or row.get("reddit") or "").strip() or None,
+            discord_url=(row.get("discord_url") or row.get("discord") or "").strip() or None,
             industry=(row.get("industry") or "").strip() or None,
             description=(row.get("description") or "").strip() or None,
             logo_url=(row.get("logo_url") or "").strip() or None,

@@ -8,6 +8,11 @@ from pydantic import BaseModel, Field
 class CompetitorBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=255)
     website_url: Optional[str] = Field(None, max_length=512)
+    twitter_url: Optional[str] = Field(None, max_length=512)
+    instagram_url: Optional[str] = Field(None, max_length=512)
+    facebook_url: Optional[str] = Field(None, max_length=512)
+    reddit_url: Optional[str] = Field(None, max_length=512)
+    discord_url: Optional[str] = Field(None, max_length=512)
     industry: Optional[str] = Field(None, max_length=255)
     description: Optional[str] = None
     logo_url: Optional[str] = Field(None, max_length=512)
@@ -21,6 +26,11 @@ class CompetitorCreate(CompetitorBase):
 class CompetitorUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=1, max_length=255)
     website_url: Optional[str] = Field(None, max_length=512)
+    twitter_url: Optional[str] = Field(None, max_length=512)
+    instagram_url: Optional[str] = Field(None, max_length=512)
+    facebook_url: Optional[str] = Field(None, max_length=512)
+    reddit_url: Optional[str] = Field(None, max_length=512)
+    discord_url: Optional[str] = Field(None, max_length=512)
     industry: Optional[str] = Field(None, max_length=255)
     description: Optional[str] = None
     logo_url: Optional[str] = Field(None, max_length=512)

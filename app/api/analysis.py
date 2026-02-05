@@ -41,9 +41,7 @@ async def start_analysis(
     payload: AnalysisRunCreate,
     db: AsyncSession = Depends(get_db),
 ):
-    """Create a new analysis run and enqueue background task."""
-    from app.tasks.analysis_tasks import run_full_analysis
-
+    """Create a new analysis run (status: pending). Trigger execution via POST /api/analysis/{id}/run or n8n/AI agent."""
     run = AnalysisRun(
         name=payload.name,
         status="pending",
@@ -57,12 +55,23 @@ async def start_analysis(
         db.add(link)
     await db.commit()
     await db.refresh(run)
-    # Enqueue Celery task (non-blocking)
-    try:
-        run_full_analysis.delay(run.id)
-    except Exception as e:
-        logger.warning("Celery enqueue failed (Redis not running?): %s", e)
     return _run_to_response(run)
+
+
+@router.post("/{analysis_id}/run")
+async def run_analysis_now(
+    analysis_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """Run analysis synchronously (no worker). Use from n8n or AI agent; may take a while."""
+    from app.services.analysis_runner import run_full_analysis_sync
+
+    check = await db.execute(select(AnalysisRun).where(AnalysisRun.id == analysis_id))
+    if not check.scalar_one_or_none():
+        raise HTTPException(status_code=404, detail="Analysis not found")
+    import asyncio
+    run_result = await asyncio.to_thread(run_full_analysis_sync, analysis_id)
+    return run_result
 
 
 @router.get("/{analysis_id}", response_model=AnalysisRunResponse)
