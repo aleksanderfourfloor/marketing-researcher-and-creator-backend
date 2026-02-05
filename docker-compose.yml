@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: competitor-analysis-api
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+
+  worker:
+    build: .
+    container_name: competitor-analysis-worker
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    command: >
+      celery -A app.tasks.analysis_tasks worker -l info
+
+  redis:
+    image: redis:7-alpine
+    container_name: competitor-analysis-redis
+    ports:
+      - "6379:6379"

@@ -2,6 +2,7 @@ aiohappyeyeballs==2.6.1
 aiohttp==3.13.2
 aiohttp-retry==2.9.1
 aiosignal==1.4.0
+aiosqlite==0.22.1
 annotated-doc==0.0.4
 annotated-types==0.7.0
 anyio==4.12.0
@@ -38,6 +39,7 @@ frozenlist==1.8.0
 fsspec==2025.10.0
 google-auth==2.45.0
 googleapis-common-protos==1.72.0
+greenlet==3.2.4
 grpcio==1.76.0
 h11==0.16.0
 hf-xet==1.2.0
@@ -115,6 +117,7 @@ PyPika==0.48.9
 pyproject_hooks==1.2.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.1
+python-multipart==0.0.20
 PyYAML==6.0.3
 referencing==0.36.2
 regex==2025.11.3

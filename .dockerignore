@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.sqlite3
+*.db
+.venv/
+venv/
+env/
+.env.local
+.DS_Store
+.git/
+.gitignore
+alembic/versions/
+
